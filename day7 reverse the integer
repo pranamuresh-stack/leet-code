@@ -1,0 +1,23 @@
+class Solution {
+    public int reverse(int x) {
+        long reversed = 0;
+        
+        while (x != 0) {
+            // Extract the last digit of x
+            int digit = x % 10;
+            
+            // Append the digit to the reversed number
+            reversed = reversed * 10 + digit;
+            
+            // Remove the last digit from x
+            x = x / 10;
+        }
+        
+        // Check if the reversed value overflows the 32-bit signed integer boundaries
+        if (reversed > Integer.MAX_VALUE || reversed < Integer.MIN_VALUE) {
+            return 0;
+        }
+        
+        return (int) reversed;
+    }
+}
