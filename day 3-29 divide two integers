@@ -1,0 +1,38 @@
+class Solution {
+    public int divide(int dividend, int divisor) {
+        // Handle overflow edge case: -2^31 / -1 = 2^31 (which overflows 32-bit signed integer)
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+
+        // Determine the sign of the quotient
+        // A true value means the result is negative
+        boolean isNegative = (dividend < 0) ^ (divisor < 0);
+
+        // Convert both numbers to negative values to prevent overflow issues
+        // (Since -2^31 cannot be safely converted to +2^31 in standard 32-bit signed integers)
+        long absDividend = Math.abs((long) dividend);
+        long absDivisor = Math.abs((long) divisor);
+
+        int quotient = 0;
+
+        // Perform exponential subtraction using bitwise shifting
+        while (absDividend >= absDivisor) {
+            long tempDivisor = absDivisor;
+            int multiple = 1;
+
+            // Double the divisor until doubling it again exceeds the remaining dividend
+            while (absDividend >= (tempDivisor << 1)) {
+                tempDivisor <<= 1;
+                multiple <<= 1;
+            }
+
+            // Subtract the largest shifted divisor from the dividend and add to quotient
+            absDividend -= tempDivisor;
+            quotient += multiple;
+        }
+
+        // Apply the correct sign to the quotient
+        return isNegative ? -quotient : quotient;
+    }
+}
