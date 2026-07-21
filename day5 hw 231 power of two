@@ -1,0 +1,8 @@
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        // Edge Case: 0 and negative numbers cannot be powers of two.
+        // Bitwise Trick: n & (n - 1) clears the lowest set bit. 
+        // A power of two has exactly one set bit, so clearing it results in 0.
+        return n > 0 && (n & (n - 1)) == 0;
+    }
+}
