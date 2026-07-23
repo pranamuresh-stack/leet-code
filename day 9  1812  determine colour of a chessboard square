@@ -1,0 +1,10 @@
+class Solution {
+    public boolean squareIsWhite(String coordinates) {
+        // Convert column character ('a'-'h') and row character ('1'-'8') to integers
+        int column = coordinates.charAt(0) - 'a' + 1;
+        int row = coordinates.charAt(1) - '0';
+        
+        // If the sum of coordinates is odd, the square is white
+        return (column + row) % 2 != 0;
+    }
+}
