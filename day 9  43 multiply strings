@@ -1,0 +1,43 @@
+class Solution {
+    public String multiply(String num1, String num2) {
+        // Edge case: if either number is "0", the result is "0"
+        if (num1.equals("0") || num2.equals("0")) {
+            return "0";
+        }
+        
+        int len1 = num1.length();
+        int len2 = num2.length();
+        // The maximum possible length of the product is len1 + len2
+        int[] result = new int[len1 + len2];
+        
+        // Multiply each digit from right to left
+        for (int i = len1 - 1; i >= 0; i--) {
+            int digit1 = num1.charAt(i) - '0';
+            
+            for (int j = len2 - 1; j >= 0; j--) {
+                int digit2 = num2.charAt(j) - '0';
+                
+                // Position in the result array where the current product will be added
+                int p1 = i + j;
+                int p2 = i + j + 1;
+                
+                // Calculate the product along with any existing value at this position
+                int sum = (digit1 * digit2) + result[p2];
+                
+                // Store the units digit at p2 and carry the tens digit to p1
+                result[p2] = sum % 10;
+                result[p1] += sum / 10;
+            }
+        }
+        
+        // Build the final string, skipping leading zeros if any
+        StringBuilder sb = new StringBuilder();
+        for (int val : result) {
+            if (!(sb.length() == 0 && val == 0)) {
+                sb.append(val);
+            }
+        }
+        
+        return sb.toString();
+    }
+}
