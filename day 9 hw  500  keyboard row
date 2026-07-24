@@ -1,0 +1,45 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public String[] findWords(String[] words) {
+        // Map each letter to its corresponding keyboard row index (0, 1, or 2)
+        int[] rowMap = new int[26];
+        
+        String row0 = "qwertyuiop";
+        String row1 = "asdfghjkl";
+        String row2 = "zxcvbnm";
+        
+        for (char c : row0.toCharArray()) rowMap[c - 'a'] = 0;
+        for (char c : row1.toCharArray()) rowMap[c - 'a'] = 1;
+        for (char c : row2.toCharArray()) rowMap[c - 'a'] = 2;
+        
+        List<String> result = new ArrayList<>();
+        
+        for (String word : words) {
+            if (isValid(word, rowMap)) {
+                result.add(word);
+            }
+        }
+        
+        // Convert the dynamic list back to a primitive String array
+        return result.toArray(new String[0]);
+    }
+    
+    private boolean isValid(String word, int[] rowMap) {
+        // Convert to lowercase to handle mixed-case inputs gracefully
+        String lowerWord = word.toLowerCase();
+        
+        // Find the designated row of the very first character
+        int targetRow = rowMap[lowerWord.charAt(0) - 'a'];
+        
+        // Verify that every other character belongs to this exact same row
+        for (int i = 1; i < lowerWord.length(); i++) {
+            if (rowMap[lowerWord.charAt(i) - 'a'] != targetRow) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+}
