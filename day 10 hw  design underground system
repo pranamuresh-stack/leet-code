@@ -1,0 +1,67 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class UndergroundSystem {
+    
+    // Helper class to store a customer's check-in details
+    private static class CheckInInfo {
+        String stationName;
+        int time;
+        
+        CheckInInfo(String stationName, int time) {
+            this.stationName = stationName;
+            this.time = time;
+        }
+    }
+    
+    // Helper class to store aggregated trip statistics
+    private static class StationStats {
+        double totalTime;
+        int tripCount;
+        
+        StationStats(double totalTime, int tripCount) {
+            this.totalTime = totalTime;
+            this.tripCount = tripCount;
+        }
+    }
+    
+    // Maps customer id -> CheckInInfo
+    private final Map<Integer, CheckInInfo> checkInMap;
+    
+    // Maps "startStation->endStation" -> StationStats
+    private final Map<String, StationStats> routeStatsMap;
+
+    public UndergroundSystem() {
+        checkInMap = new HashMap<>();
+        routeStatsMap = new HashMap<>();
+    }
+    
+    public void checkIn(int id, String stationName, int t) {
+        // Record the customer's check-in station and time
+        checkInMap.put(id, new CheckInInfo(stationName, t));
+    }
+    
+    public void checkOut(int id, String stationName, int t) {
+        // Retrieve the check-in info and remove it from the active tracking map
+        CheckInInfo checkIn = checkInMap.remove(id);
+        
+        // Form a unique string key representing the route
+        String routeKey = checkIn.stationName + "->" + stationName;
+        int travelTime = t - checkIn.time;
+        
+        // Update or create the stats for this specific route
+        StationStats stats = routeStatsMap.getOrDefault(routeKey, new StationStats(0, 0));
+        stats.totalTime += travelTime;
+        stats.tripCount += 1;
+        
+        routeStatsMap.put(routeKey, stats);
+    }
+    
+    public double getAverageTime(String startStation, String endStation) {
+        String routeKey = startStation + "->" + endStation;
+        StationStats stats = routeStatsMap.get(routeKey);
+        
+        // Return the computed average
+        return stats.totalTime / stats.tripCount;
+    }
+}
