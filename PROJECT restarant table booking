@@ -1,0 +1,96 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Booking {
+    String customerName;
+    int tableNumber;
+
+    Booking(String customerName, int tableNumber) {
+        this.customerName = customerName;
+        this.tableNumber = tableNumber;
+    }
+}
+
+public class RestaurantTableBooking {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Booking> bookings = new ArrayList<>();
+
+        while (true) {
+            System.out.println("\n--- Restaurant Table Booking System ---");
+            System.out.println("1. Book Table");
+            System.out.println("2. View Bookings");
+            System.out.println("3. Cancel Booking");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Customer Name: ");
+                    String name = sc.nextLine();
+
+                    System.out.print("Enter Table Number: ");
+                    int table = sc.nextInt();
+
+                    boolean booked = false;
+                    for (Booking b : bookings) {
+                        if (b.tableNumber == table) {
+                            booked = true;
+                            break;
+                        }
+                    }
+
+                    if (booked) {
+                        System.out.println("Table already booked!");
+                    } else {
+                        bookings.add(new Booking(name, table));
+                        System.out.println("Booking Successful!");
+                    }
+                    break;
+
+                case 2:
+                    if (bookings.isEmpty()) {
+                        System.out.println("No bookings found.");
+                    } else {
+                        System.out.println("\nCurrent Bookings:");
+                        for (Booking b : bookings) {
+                            System.out.println("Customer: " + b.customerName +
+                                               " | Table: " + b.tableNumber);
+                        }
+                    }
+                    break;
+
+                case 3:
+                    System.out.print("Enter Table Number to Cancel: ");
+                    int cancelTable = sc.nextInt();
+
+                    boolean removed = false;
+                    for (int i = 0; i < bookings.size(); i++) {
+                        if (bookings.get(i).tableNumber == cancelTable) {
+                            bookings.remove(i);
+                            removed = true;
+                            break;
+                        }
+                    }
+
+                    if (removed) {
+                        System.out.println("Booking Cancelled.");
+                    } else {
+                        System.out.println("Booking not found.");
+                    }
+                    break;
+
+                case 4:
+                    System.out.println("Thank you!");
+                    sc.close();
+                    System.exit(0);
+
+                default:
+                    System.out.println("Invalid Choice.");
+            }
+        }
+    }
+}
